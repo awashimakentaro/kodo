@@ -11,7 +11,7 @@ erDiagram
         string id PK
         string customId UNIQUE
         string name
-        string bio "自己紹介"
+        string bio
         string image
         string email UNIQUE
     }
@@ -19,23 +19,23 @@ erDiagram
     POST {
         string id PK
         string userId FK
-        date targetDate "記録対象の日"
-        text reflection "今日の振り返り本文"
-        datetime createdAt "投稿した時間"
-        datetime updatedAt "最後に編集された時間"
+        date targetDate
+        text reflection
+        datetime createdAt
+        datetime updatedAt
     }
 
     TASK {
         string id PK
         string postId FK
         string text
-        boolean completed "taskの完了チェック"
+        boolean completed
     }
 
     FOLLOW {
         string id PK
-        string followerId FK "フォローする側"
-        string followingId FK "フォローされる側"
+        string followerId FK
+        string followingId FK
     }
 
     LIKE {
