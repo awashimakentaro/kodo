@@ -6,28 +6,28 @@ import {supabase} from '@/lib/supabase'
 export  default function login() {
     const [email ,setEmail] = useState("")
     const [password ,setPassword] = useState("")
+    const [name, setName] = useState("")
+    const [customId, setCustomId] = useState("")
     const [errorMessage ,setErrorMessage] = useState("")
     const [status ,setStatus] = useState("")
+    
 
     const handleSignUp = async() => {
 
-        const Name = "Anonymous";
-        const CustomId = `user_${crypto.randomUUID().slice(0, 8)}`;//userテーブルはname customId がnotnullのため適当なデータを挿入しとく一時的にね
 
 
         const {data , error} = await supabase.auth.signUp({
             email,
             password,
-            options:{
-                name: Name,
-                customId: CustomId,
-            }
+            name,
+            customId
         });
         if (error){
             setErrorMessage(error ? error.message : "") //error ? error.message : "" これはerrorが起こった場合error.messageを入れる　errorじゃなければ空文字
             console.log("signup error:",error);
-        }
+        }else{
         setStatus("サインアップ成功")
+        }
         console.log("session:",data.session)
 
     }
@@ -39,9 +39,23 @@ export  default function login() {
         if (error){
             setErrorMessage(error ? error.message : "")
             console.log("signup error:",error);
+        }else{
+            console.log("session:",data.session)
+            setStatus("サインイン成功")
+            await fetch("/api/users",{
+                method:"POST",
+                headers:{"content-type":"application/json"},
+                body: JSON.stringify({
+                    id:data.user?.id,
+                    email,
+                    customId,
+                    name,        
+                })
+               })
         }
-        setStatus("サインイン成功")
-        console.log("session:",data.session)
+        
+       
+
     }
 
     return (
@@ -58,6 +72,20 @@ export  default function login() {
             type="text" 
             placeholder='password'
             onChange={(e) => setPassword(e.target.value)}
+            style={{display:"block",marginBottom:10}}
+            />
+
+        <input 
+            type="text"
+            placeholder="name"
+            onChange={(e) => setName(e.target.value)}
+            style={{display:"block",marginBottom:10}}
+            />
+
+        <input 
+            type="text"
+            placeholder="customId"
+            onChange={(e) => setCustomId(e.target.value)}
             style={{display:"block",marginBottom:10}}
             />
 
