@@ -34,7 +34,7 @@ model User {
 model Post {
   id         String   @id @default(uuid())
   userId     String
-  targetDate DateTime
+  targetDate DateTime @db.Date
   reflection String
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt

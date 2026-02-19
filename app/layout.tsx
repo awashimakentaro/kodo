@@ -1,6 +1,7 @@
 // app/layout.tsx
 import Link from "next/link";
 import "./globals.css";
+import { AuthProvider } from "./providers/AuthProvider";
 
 export const metadata = {
   title: "Kodo",
@@ -12,7 +13,7 @@ export default function RootLayout({children,}: {children: React.ReactNode;}) {
     <html lang="ja">
       <body>
         <div>
-          {children}
+          <AuthProvider>{children}</AuthProvider>
         </div>
         <nav
         style={{

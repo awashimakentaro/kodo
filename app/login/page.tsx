@@ -10,17 +10,17 @@ export  default function login() {
     const [customId, setCustomId] = useState("")
     const [errorMessage ,setErrorMessage] = useState("")
     const [status ,setStatus] = useState("")
+
+    
     
 
     const handleSignUp = async() => {
 
-
-
         const {data , error} = await supabase.auth.signUp({
             email,
             password,
-            name,
-            customId
+            options: { data: { name, customId } }//これを書くことであとでuser_metadataとして取得できる。これはpublic.usersに保存される
+
         });
         if (error){
             setErrorMessage(error ? error.message : "") //error ? error.message : "" これはerrorが起こった場合error.messageを入れる　errorじゃなければ空文字
@@ -36,22 +36,28 @@ export  default function login() {
             email,
             password,
           })
+
+        const user = data.user;
+        const name = user?.user_metadata?.name;
+        const customId = user?.user_metadata?.customId;
+        
         if (error){
             setErrorMessage(error ? error.message : "")
             console.log("signup error:",error);
         }else{
             console.log("session:",data.session)
             setStatus("サインイン成功")
-            await fetch("/api/users",{
+            const res = await fetch("/api/users",{
                 method:"POST",
                 headers:{"content-type":"application/json"},
                 body: JSON.stringify({
                     id:data.user?.id,
-                    email,
-                    customId,
-                    name,        
+                    email: data.user?.email,
+                    customId:customId,
+                    name:name,    
                 })
-               })
+            })
+            console.log(await res.text());
         }
         
        
