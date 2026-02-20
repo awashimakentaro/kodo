@@ -27,11 +27,11 @@ export default function RootLayout({children,}: {children: React.ReactNode;}) {
           justifyContent: "space-around",
           alignItems: "center",
           }}>
+          <Link href="/login">login</Link>
           <Link href="/">Home</Link>
           <Link href="/post">Post</Link>
-          <Link href="/profile">Profile</Link>
           <Link href="/timeline">Timeline</Link>
-          <Link href="/login">login</Link>
+          
         </nav>
       </body>
     </html>
