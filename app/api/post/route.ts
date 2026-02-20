@@ -41,9 +41,45 @@ export async function POST(req:Request){
     }
 
 }
+
+export async function GET(req:Request){//前日のtasksの情報等を取得する
+    const { searchParams } = new URL(req.url)
+    const userId = searchParams.get("userId")
+    const targetDate = searchParams.get("targetDate")
+
+    if (!userId || !targetDate){ return NextResponse.json({error: "migging params"}, {status: 400})    }
+
+    const date = new Date(targetDate)
+
+    const post = await prisma.post.findUnique({
+        where: {
+            userId_targetDate: {// @@unique([userId, targetDate]) とprismaに定義した場合tsではuserId_targetDateという形でここに入力する.Prisma が userId_targetDateというキーを自動生成します
+                userId,
+                targetDate: date,
+            },
+        },
+        include:{ tasks: true}
+    });
+    return NextResponse.json({post})
+    // {
+    //     "post": {
+    //       "id": "post-uuid",
+    //       "userId": "user-uuid",
+    //       "targetDate": "2026-02-19",
+    //       "reflection": "今日の振り返り本文",
+    //       "createdAt": "2026-02-19T14:35:20.584Z",
+    //       "updatedAt": "2026-02-19T14:35:20.584Z",
+    //       "tasks": [
+    //         { "id": "task-uuid-1", "postId": "post-uuid", "text": "朝ラン" },
+    //         { "id": "task-uuid-2", "postId": "post-uuid", "text": "勉強" }
+    //       ]
+    //     }
+    //   }みたいなjsonが取得できる。あくまでここで取得してるのはtasksのjsonではなくpostの情報+それに関連するtasksの情報
+}
 //         string id PK
 //         string userId FK
 //         date targetDate "記録対象の日"
 //         text reflection "今日の振り返り本文"
 //         datetime createdAt "投稿した時間"
 //         datetime updatedAt "最後に編集された時間"
+

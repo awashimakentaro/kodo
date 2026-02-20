@@ -1,5 +1,7 @@
 import {prisma} from "@/lib/prisma"
+import { error } from "console"
 import { NextResponse } from "next/server"
+import { serialize } from "v8"
 
 export async function POST(req:Request){
     const {postId, text, compleated} = await req.json()
@@ -14,4 +16,5 @@ export async function POST(req:Request){
             compleated
         }
     })
- }
+}
+
