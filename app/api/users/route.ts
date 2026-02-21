@@ -1,5 +1,7 @@
 import { prisma } from "@/lib/prisma";
+import { error } from "console";
 import { NextResponse } from "next/server";
+import { serialize } from "v8";
 
 export async function POST(req:Request){
     const {id, email, customId, name } = await req.json();
@@ -16,3 +18,17 @@ export async function POST(req:Request){
     return NextResponse.json({user})
 }
 
+export async function GET(req: Request){
+
+    const {searchParams} = new URL(req.url); 
+    const customId = searchParams.get("customId");
+
+    if (!customId) { return NextResponse.json({error: "missing customId"}, { status: 400})}
+
+    const user = await prisma.user.findUnique({
+        where: {customId},
+        select: {id: true, customId: true, name: true,},
+    })
+
+    return NextResponse.json({user})
+} 
