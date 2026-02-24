@@ -1,6 +1,13 @@
 "use client"
-import { useState } from 'react'
+import { useState , useEffect} from 'react'
 import { useAuth } from '../providers/AuthProvider';
+
+type TimelinePost = {
+    id: string;
+    reflection: string;
+    targetDate: string;
+    user: { id: string; name: string; customId: string }
+}
 
 export default function timeline() {
 
@@ -9,8 +16,22 @@ export default function timeline() {
     const [notFound, setNotFound] = useState<string | null>(null)//<string | null> とは値に文字かnullが入るよ
     const [isFollowing, setIsFollowing] = useState(false)
     const [followMsg, setFollowMsg] = useState<string | null>(null);
+    const [posts, setPosts] = useState<TimelinePost[]>([]);
 
     const {user} = useAuth()
+    
+    useEffect(() => {
+        if (!user?.id) return;
+  
+        const d = new Date();
+        d.setDate(d.getDate() - 1);
+        const ymd = d.toLocaleDateString("en-CA");
+  
+        fetch(`/api/timeline?userId=${user.id}&targetDate=${ymd}`)
+          .then((res) => res.json())
+          .then((data) => setPosts(data.posts ?? []));
+      }, [user?.id]);
+
 
 
     const checkFollow = async (followingId: string) => {
@@ -110,6 +131,17 @@ export default function timeline() {
                 }}>
 
                 <h1>timeline</h1>
+                <div>機能のフォロワーの投稿</div>
+                {
+                    posts.length === 0 ? (<div>機能の橙子はありません</div>):
+                    ( posts.map((p) => (
+                        <div key={p.id}>
+                            <div>{p.user.name}({p.user.customId})</div>
+                            <div>{p.reflection}</div>
+                        </div>
+                    )))
+
+                }
 
             </div>
         </div>

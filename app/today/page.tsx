@@ -12,9 +12,16 @@ export default function today() {
   useEffect(()=>{
     if (!user?.id) return;
 
+
+
+
     const d = new Date();
     d.setDate(d.getDate() -1);//ここで前日の日付数値を設定
     const ymd = d.toLocaleDateString("en-CA")//en-CAとはロケール指定　2026-02-20のような形式のこと
+
+
+
+    
 
     fetch(`/api/post?userId=${user.id}&targetDate=${ymd}`)
     .then((res) => res.json()) //then()とは、前の処理が終わったら次はこれを実行するという関数 resとはfetchにより帰ってきたapiの　return NextResponse.json({post})また、return NextResponse.json({post})とはjsonではなくresponseオブジェクトのためres.json()とすることで初めてjsonに変換される　res → まだ「箱」　
