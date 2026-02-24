@@ -26,7 +26,8 @@ export async function GET(req: Request){
             id:true,
             reflection: true,
             targetDate: true,
-            user: { select: {id:true,name: true, customId: true }}//apiの返答に投稿ユーザーの情報を加えるための設定
+            user: { select: {id:true,name: true, customId: true }},//apiの返答に投稿ユーザーの情報を加えるための設定
+            likes:{where:{userId}, select:{id: true}}
         },
         orderBy:{ createdAt: "desc"}
     })

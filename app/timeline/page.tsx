@@ -84,10 +84,24 @@ export default function timeline() {
         await checkFollow(data.user.id)
     }
 
-    const follow = async () =>{
+    const toggleLike = async (postId: string, liked: boolean)=>{
+        const method = liked ? "DELETE" : "POST";
+        await fetch("/api/like",{
+            method,
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ userId: user?.id, postId }),
+        })
 
+        setPosts((prev) =>
+            prev.map((p) =>
+              p.id === postId
+                ? { ...p, likes: liked ? [] : [{ id: "temp" }] }
+                : p
+            )
+          );
     }
 
+    
   return (
     <div>
         <div style={{
@@ -134,12 +148,19 @@ export default function timeline() {
                 <div>機能のフォロワーの投稿</div>
                 {
                     posts.length === 0 ? (<div>機能の橙子はありません</div>):
-                    ( posts.map((p) => (
-                        <div key={p.id}>
+                    ( posts.map((p) => {
+                        const liked = (p.likes?.length ?? 0) > 0;//likesが０より大きければtrue likesはposetsnoapiつまりtimeline/routeのgetから取得
+                        return (
+                          <div key={p.id}>
                             <div>{p.user.name}({p.user.customId})</div>
                             <div>{p.reflection}</div>
-                        </div>
-                    )))
+                            <button onClick={() => toggleLike(p.id, liked)}>
+                              {liked ? "いいね解除" : "いいね"}
+                            </button>
+                          </div>
+                        );
+                      })
+                    )
 
                 }
 
