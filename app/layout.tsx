@@ -28,9 +28,8 @@ export default function RootLayout({children,}: {children: React.ReactNode;}) {
           alignItems: "center",
           }}>
           <Link href="/login">login</Link>
-          <Link href="/">Home</Link>
           <Link href="/post">Post</Link>
-          <Link href="/timeline">Timeline</Link>
+          <Link href="/">home</Link>
           <Link href="/today">today</Link>
           
         </nav>
