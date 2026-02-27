@@ -1,7 +1,7 @@
 // app/layout.tsx
-import Link from "next/link";
 import "./globals.css";
 import { AuthProvider } from "./providers/AuthProvider";
+import BottomNav from "./components/BottomNav";
 
 export const metadata = {
   title: "Kodo",
@@ -15,25 +15,9 @@ export default function RootLayout({children,}: {children: React.ReactNode;}) {
         <div>
           <AuthProvider>{children}</AuthProvider>
         </div>
-        <nav
-        style={{
-          position:"fixed",
-          bottom:0,
-          left:0,
-          height:"200px",
-          background:"#ff3",
-          borderTop:"1px solid #ddd",
-          display:"flex",
-          justifyContent: "space-around",
-          alignItems: "center",
-          }}>
-          <Link href="/login">login</Link>
-          <Link href="/post">Post</Link>
-          <Link href="/">home</Link>
-          <Link href="/today">today</Link>
-          
-        </nav>
+        <BottomNav />
       </body>
     </html>
   );
 }
+//このauthproviderでログイン情報を全体に配る
