@@ -187,7 +187,7 @@ export default function Home() {
                     </div>
                   </div>
 
-                  <div className="mt-4 rounded-2xl border border-slate-100 bg-slate-50 px-5 py-4 text-sm font-normal leading-6 text-slate-600">
+                  <div className="mt-4 rounded-2xl border border-slate-100 bg-slate-50 px-5 py-4 text-sm font-normal leading-6 text-slate-600 whitespace-pre-wrap break-words">
                     {p.reflection}
                   </div>
 
