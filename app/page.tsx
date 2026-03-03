@@ -3,8 +3,7 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "./providers/AuthProvider";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
-
-
+import type { TimelinePost } from "../features/timeline/types/types";
 
 export default function Home() {
   const [customId, setCustomId] = useState("");
