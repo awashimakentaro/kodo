@@ -1,7 +1,7 @@
 // app/layout.tsx
 import "./globals.css";
 import { AuthProvider } from "./providers/AuthProvider";
-import BottomNav from "./components/BottomNav";
+import BottomNav from "../features/components/BottomNav";
 
 export const metadata = {
   title: "Kodo",

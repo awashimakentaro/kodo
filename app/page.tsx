@@ -4,13 +4,7 @@ import { useState, useEffect } from "react";
 import { useAuth } from "./providers/AuthProvider";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 
-type TimelinePost = {
-  id: string;
-  reflection: string;
-  targetDate: string;
-  user: { id: string; name: string; customId: string };
-  likes?: { id: string }[];
-};
+
 
 export default function Home() {
   const [customId, setCustomId] = useState("");
