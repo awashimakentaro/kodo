@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useAuth } from "./providers/AuthProvider";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import type { TimelinePost } from "../features/timeline/types/types";
-import { getYesterdayYmd , formatDateJP} from "@/features/timeline/lib/date";
+import { getYesterdayYmd, formatDateJP } from "@/features/timeline/lib/date";
 
 export default function Home() {
   const [customId, setCustomId] = useState("");
@@ -13,15 +13,12 @@ export default function Home() {
   const [isFollowing, setIsFollowing] = useState(false);
   const [followMsg, setFollowMsg] = useState<string | null>(null);
   const [posts, setPosts] = useState<TimelinePost[]>([]);
-  const ymd = getYesterdayYmd()
+  const ymd = getYesterdayYmd();
   const dateLabel = formatDateJP(ymd);
   const { user } = useAuth();
 
   useEffect(() => {
     if (!user?.id) return;
-
-
-    
 
     fetch(`/api/timeline?userId=${user.id}&targetDate=${ymd}`)
       .then((res) => res.json())
@@ -150,7 +147,6 @@ export default function Home() {
           ) : (
             posts.map((p) => {
               const liked = (p.likes?.length ?? 0) > 0;
-            
 
               return (
                 <div

@@ -1,12 +1,13 @@
-export const getYesterdayYmd = (base: Date = new Date()) => { //base: Date = new Date()とはbaseはDate型だしDateのオブジェクトだよとしてる
+export const getYesterdayYmd = (base: Date = new Date()) => {
+  //base: Date = new Date()とはbaseはDate型だしDateのオブジェクトだよとしてる
   const d = new Date(base);
   d.setDate(d.getDate() - 1);
   return d.toLocaleDateString("en-CA");
 };
 
 export const formatDateJP = (date: string | Date) => {
-    return new Date(date).toLocaleDateString("ja-JP");
-  };
+  return new Date(date).toLocaleDateString("ja-JP");
+};
 
 /*
 ========================================
