@@ -29,7 +29,7 @@ export default function Home() {
     if (!user?.id) return;
 
     const run = async () => {
-      const ymd = getYesterdayYmd();
+      
       const posts = await fetchTimelinePosts(user.id, ymd);
       setPosts(posts);
     };
