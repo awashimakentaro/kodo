@@ -38,3 +38,4 @@ export const useUserSearch = (): UseUserSearch => {
   };
   return { user, notFound, loading, error, search };
 };
+//今回はusecallbackを使わないように書いてみた
