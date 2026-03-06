@@ -5,6 +5,14 @@ import { useAuth } from "./providers/AuthProvider";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import type { TimelinePost } from "../features/timeline/types/types";
 import { getYesterdayYmd, formatDateJP } from "@/features/timeline/lib/date";
+import { fetchTimelinePosts } from "@/features/timeline/services/timelineService";
+import {
+  fetchFollowStatus,
+  followUser,
+  unfollowUser,
+} from "@/features/timeline/services/followService";
+import { fetchUserByCustomId } from "@/features/timeline/services/userService";
+import { likePost, unlikePost } from "@/features/timeline/services/likeService";
 
 export default function Home() {
   const [customId, setCustomId] = useState("");
@@ -20,63 +28,55 @@ export default function Home() {
   useEffect(() => {
     if (!user?.id) return;
 
-    fetch(`/api/timeline?userId=${user.id}&targetDate=${ymd}`)
-      .then((res) => res.json())
-      .then((data) => setPosts(data.posts ?? []));
+    const run = async () => {
+      const ymd = getYesterdayYmd();
+      const posts = await fetchTimelinePosts(user.id, ymd);
+      setPosts(posts);
+    };
+
+    run();
   }, [user?.id]);
 
   const checkFollow = async (followingId: string) => {
     if (!user?.id || !followingId) return;
 
-    const res = await fetch(`/api/follow?followerId=${user.id}&followingId=${followingId}`);
-    const data = await res.json();
-    setIsFollowing(!!data.isFollowing);
+    const check = await fetchFollowStatus(user?.id, followingId);
+    setIsFollowing(check);
   };
 
   const toggleFollow = async () => {
     if (!user?.id || !foundUser?.id) return;
 
     if (isFollowing) {
-      await fetch("/api/follow", {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ followerId: user.id, followingId: foundUser.id }),
-      });
+      unfollowUser(user.id, foundUser?.id);
 
       setIsFollowing(false);
       setFollowMsg("フォロー解除しました");
     } else {
-      await fetch("/api/follow", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ followerId: user.id, followingId: foundUser.id }),
-      });
+      followUser(user?.id, foundUser?.id);
       setIsFollowing(true);
       setFollowMsg("フォローしました");
     }
   };
 
   const serchId = async () => {
-    const res = await fetch(`/api/users?customId=${customId}`);
-    const data = await res.json();
+    const serchId = fetchUserByCustomId(customId);
 
-    if (!data.user) {
+    if (!serchId) {
       setNotFound("このユーザーはいないよ");
       setFoundUser(null);
       return;
     }
-    setFoundUser(data.user);
+    setFoundUser(serchId);
     setNotFound(null);
-    await checkFollow(data.user.id);
+    await checkFollow(foundUser.id);
   };
 
   const toggleLike = async (postId: string, liked: boolean) => {
-    const method = liked ? "DELETE" : "POST";
-    await fetch("/api/like", {
-      method,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userId: user?.id, postId }),
-    });
+    if (!user?.id) return;
+    const like_Post = likePost(user.id, postId);
+    const unlike_Post = unlikePost(user.id, postId);
+    const method = liked ? unlike_Post : like_Post;
 
     setPosts((prev) =>
       prev.map((p) => (p.id === postId ? { ...p, likes: liked ? [] : [{ id: "temp" }] } : p)),
