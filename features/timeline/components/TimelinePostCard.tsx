@@ -1,14 +1,17 @@
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import type { TimelinePost } from "../types/types";
+import { useLike } from "../hooks/useLike";
 
 type Props = {
   post: TimelinePost;
   dateLabel: string;
-  liked: boolean;
-  onToggleLike: (postId: string, liked: boolean) => void; //外から関数をもらうときはon　この表記はこのファイルでは関数の処理を行わすhooksなどで処理を行うためここではvoidを指す
+  userId?: string;
 };
 
-export const TimelinePostCard = ({ post, dateLabel, liked, onToggleLike }: Props) => {
+export const TimelinePostCard = ({ post, dateLabel, userId }: Props) => {
+  const initialLiked = (post.likes?.length ?? 0) > 0;
+  const { liked, toggle, loading } = useLike(userId, post.id, initialLiked);
+
   return (
     <div className="rounded-[32px] border border-slate-100 bg-white p-6 shadow-[0_8px_30px_rgba(0,0,0,0.02)]">
       <div className="flex items-center gap-3">
@@ -25,10 +28,7 @@ export const TimelinePostCard = ({ post, dateLabel, liked, onToggleLike }: Props
       </div>
 
       <div className="mt-4 flex items-center justify-between border-t border-slate-100 pt-3">
-        <button
-          onClick={() => onToggleLike(post.id, liked)}
-          className="inline-flex items-center gap-1"
-        >
+        <button onClick={toggle} disabled={loading} className="inline-flex items-center gap-1">
           {liked ? (
             <FaHeart className="h-5 w-5 text-red-500" />
           ) : (

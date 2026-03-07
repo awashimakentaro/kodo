@@ -1,12 +1,10 @@
-import type { UserSummary } from "../types/types";
-
 type Props = {
   customId: string;
   onChangeCustomId: (value: string) => void;
   onSearch: () => void;
 };
 
-export const UserSearchPanel = ({ customId, onChangeCustomId, onSearch }: Props) => {
+export const UserSearchInput = ({ customId, onChangeCustomId, onSearch }: Props) => {
   return (
     <div className="mb-4 flex items-center gap-3 rounded-[20px] borderborder-slate-100 bg-white px-5 py-4 shadow-sm">
       <span>🔍</span>
