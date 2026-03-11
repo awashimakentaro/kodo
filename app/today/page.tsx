@@ -4,19 +4,17 @@ import React, { useEffect, useState } from "react";
 import { useAuth } from "../providers/AuthProvider";
 import { Task } from "@prisma/client";
 import { TaskTextList } from "@/features/today/types/type";
+import { getYesterdayYmd } from "@/lib/date";
 
 export default function today() {
   const { user } = useAuth();
   const [prevTasks, setPrevTasks] = useState<TaskTextList>([]);
   const [prevPost, setPrevPost] = useState("");
   const [selectDate, setSelectDate] = useState("");
+  const ymd = getYesterdayYmd()
 
   useEffect(() => {
     if (!user?.id) return;
-
-    const d = new Date();
-    d.setDate(d.getDate() - 1); //ここで前日の日付数値を設定
-    const ymd = d.toLocaleDateString("en-CA"); //en-CAとはロケール指定　2026-02-20のような形式のこと
 
     const targetDate = selectDate || ymd;
 
