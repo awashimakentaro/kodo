@@ -2,10 +2,12 @@
 
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../providers/AuthProvider";
+import { Task } from "@prisma/client";
+import { TaskTextList } from "@/features/today/types/type";
 
 export default function today() {
   const { user } = useAuth();
-  const [prevTasks, setPrevTasks] = useState<string[]>([]);
+  const [prevTasks, setPrevTasks] = useState<TaskTextList>([]);
   const [prevPost, setPrevPost] = useState("");
   const [selectDate, setSelectDate] = useState("");
 
@@ -21,7 +23,7 @@ export default function today() {
     fetch(`/api/post?userId=${user.id}&targetDate=${ymd}`)
       .then((res) => res.json()) //then()とは、前の処理が終わったら次はこれを実行するという関数 resとはfetchにより帰ってきたapiの　return NextResponse.json({post})また、return NextResponse.json({post})とはjsonではなくresponseオブジェクトのためres.json()とすることで初めてjsonに変換される　res → まだ「箱」
       .then((data) => {
-        const tasks = data?.post?.tasks?.map((t: { text: string }) => t.text) ?? []; //data?.post?.tasks?とはdata / post / tasks が存在する時だけ進む .map((t) => t.text) tasks の各要素から text だけ抜き出す　(t) => t.text は アロー関数で、t は 引数（ここでは tasks の1要素）t.text を 返す という意味
+        const tasks = data?.post?.tasks?.map((t: Task) => t.text) ?? []; //data?.post?.tasks?とはdata / post / tasks が存在する時だけ進む .map((t) => t.text) tasks の各要素から text だけ抜き出す　(t) => t.text は アロー関数で、t は 引数（ここでは tasks の1要素）t.text を 返す という意味
         setPrevTasks(tasks);
       });
 
