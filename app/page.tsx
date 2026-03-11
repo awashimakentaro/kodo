@@ -2,7 +2,7 @@
 
 import { useState} from "react";
 import { useAuth } from "./providers/AuthProvider";
-import { getYesterdayYmd, formatDateJP } from "@/features/timeline/lib/date";
+import { getYesterdayYmd, formatDateJP } from "../lib/date";
 
 import { TimelineHeader } from "@/features/timeline/components/TimelineHeader";
 import { UserSearchInput } from "@/features/timeline/components/UserSearchInput";
