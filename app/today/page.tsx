@@ -4,7 +4,8 @@ import React, { useEffect, useState } from "react";
 import { useAuth } from "../providers/AuthProvider";
 import { TaskTextList } from "@/features/today/types/type";
 import { getYesterdayYmd } from "@/lib/date";
-import { fetchMyPostReflection, fetchPostTasks } from "@/features/today/services/taskService";
+import { fetchPostTasks } from "@/features/today/services/taskService";
+import { fetchMyPostReflection } from "@/features/today/services/reflectionService";
 
 export default function today() {
   const { user } = useAuth();
