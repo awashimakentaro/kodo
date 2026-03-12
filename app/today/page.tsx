@@ -1,18 +1,21 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "../providers/AuthProvider";
 import { TaskTextList } from "@/features/today/types/type";
 import { getYesterdayYmd } from "@/lib/date";
 import { fetchPostTasks } from "@/features/today/services/taskService";
 import { fetchMyPostReflection } from "@/features/today/services/reflectionService";
+import { usePrevTasks } from "@/features/today/hooks/usePrevTasks";
 
 export default function today() {
   const { user } = useAuth();
   const [prevTasks, setPrevTasks] = useState<TaskTextList>([]);
   const [prevPost, setPrevPost] = useState("");
   const [selectDate, setSelectDate] = useState("");
-  const ymd = getYesterdayYmd()
+  const ymd = getYesterdayYmd();
+
+  const { tasks, isLoading: tasksLoading } = usePrevTasks(user?.id, ymd);
 
   useEffect(() => {
     if (!user?.id) return;
