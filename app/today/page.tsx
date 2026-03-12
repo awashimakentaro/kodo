@@ -2,9 +2,9 @@
 
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../providers/AuthProvider";
-import { Task } from "@prisma/client";
 import { TaskTextList } from "@/features/today/types/type";
 import { getYesterdayYmd } from "@/lib/date";
+import { fetchMyPostReflection, fetchPostTasks } from "@/features/today/services/taskService";
 
 export default function today() {
   const { user } = useAuth();
@@ -18,16 +18,8 @@ export default function today() {
 
     const targetDate = selectDate || ymd;
 
-    fetch(`/api/post?userId=${user.id}&targetDate=${ymd}`)
-      .then((res) => res.json()) //then()とは、前の処理が終わったら次はこれを実行するという関数 resとはfetchにより帰ってきたapiの　return NextResponse.json({post})また、return NextResponse.json({post})とはjsonではなくresponseオブジェクトのためres.json()とすることで初めてjsonに変換される　res → まだ「箱」
-      .then((data) => {
-        const tasks = data?.post?.tasks?.map((t: Task) => t.text) ?? []; //data?.post?.tasks?とはdata / post / tasks が存在する時だけ進む .map((t) => t.text) tasks の各要素から text だけ抜き出す　(t) => t.text は アロー関数で、t は 引数（ここでは tasks の1要素）t.text を 返す という意味
-        setPrevTasks(tasks);
-      });
-
-    fetch(`api/my-post?userId=${user.id}&targetDate=${targetDate}`)
-      .then((res) => res.json())
-      .then((data) => setPrevPost(data?.post?.reflection ?? ""));
+    fetchPostTasks(user.id, ymd).then(setPrevTasks);
+    fetchMyPostReflection(user.id, targetDate).then(setPrevPost);
   }, [user?.id, selectDate]);
 
   return (
