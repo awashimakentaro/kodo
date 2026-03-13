@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 import { serialize } from "v8";
 
 export async function POST(req: Request) {
-  const { postId, text, compleated } = await req.json();
+  const { postId, text, completed } = await req.json();
   if (!postId || !text) {
     return NextResponse.json({ error: "missing fields" }, { status: 400 });
   }
@@ -13,7 +13,7 @@ export async function POST(req: Request) {
     data: {
       postId,
       text,
-      compleated,
+      completed,
     },
   });
 }
