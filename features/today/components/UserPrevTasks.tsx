@@ -3,7 +3,7 @@ type prevTasksProps = {
   emptyMessage?: string;
 };
 
-export const PrevTasks = ({
+export const UserPrevTasks = ({
   tasks,
   emptyMessage = "今日の目標はまだ設定されていません。",
 }: prevTasksProps) => {

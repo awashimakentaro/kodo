@@ -3,7 +3,7 @@ import { fetchPostTasks } from "../services/taskService";
 import { TaskTextList } from "../types/type";
 
 export const usePrevTasks = (userId?: string, targetDate?: string) => {
-  const shouldFetch = Boolean(userId && targetDate);//ここでtrue or falseを判定する。これをkeyのところで使用することで,もしもtrueならkey cashを作りfetchするしfalseならそもそもfetchを起こさないと言う制御ができる
+  const shouldFetch = Boolean(userId && targetDate); //ここでtrue or falseを判定する。これをkeyのところで使用することで,もしもtrueならkey cashを作りfetchするしfalseならそもそもfetchを起こさないと言う制御ができる
   const { data, error, isLoading } = useSWR<TaskTextList>(
     shouldFetch ? ["prevTasks", userId, targetDate] : null, //key
     () => fetchPostTasks(userId!, targetDate!), //fetcher
